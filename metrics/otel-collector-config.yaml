@@ -1,0 +1,19 @@
+receivers:
+  docker_stats:
+    endpoint: unix:///var/run/docker.sock
+
+exporters:
+  otlphttp/prometheus:
+    endpoint: http://prometheus:9090/api/v1/otlp
+    tls:
+      insecure: true
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    metrics:
+      receivers: [docker_stats]
+      processors: [batch]
+      exporters: [otlphttp/prometheus]

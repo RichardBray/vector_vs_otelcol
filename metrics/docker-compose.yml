@@ -1,0 +1,21 @@
+services:
+  vector:
+    image: timberio/vector:0.43.0-debian
+    volumes:
+      - ./vector.yaml:/etc/vector/vector.yaml:ro
+
+  # otel-collector:
+  #   image: otel/opentelemetry-collector-contrib
+  #   volumes:
+  #     - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+  #     - /var/run/docker.sock:/var/run/docker.sock
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-otlp-receiver

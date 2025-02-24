@@ -1,0 +1,27 @@
+sources:
+  traces:
+    type: opentelemetry
+    grpc:
+      address: 0.0.0.0:4317
+    http:
+      address: 0.0.0.0:4318
+
+transforms:
+  format_traces:
+    type: "remap"
+    inputs: ["traces.traces"]
+    source: |
+      . = {"spans": .}
+
+sinks:
+  jaeger:
+    type: "http"
+    inputs: ["format_traces"]
+    uri: "http://jaeger:14268/api/traces"
+    method: "post"
+    encoding:
+      codec: "json"
+    request:
+      headers:
+        "Content-Type": "application/json"
+    compression: "none"

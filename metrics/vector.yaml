@@ -1,0 +1,9 @@
+sources:
+  docker_stats:
+    type: prometheus_scrape
+    endpoints: ["http://host.docker.internal:9323/metrics"]
+
+sinks:
+  prometheus:
+    type: prometheus_exporter
+    inputs: ["docker_stats"]
